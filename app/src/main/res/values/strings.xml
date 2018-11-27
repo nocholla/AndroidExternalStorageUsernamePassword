@@ -1,0 +1,22 @@
+<resources>
+
+    <!-- App -->
+    <string name="app_name">ExternalStorageUsernamePassword</string>
+
+    <!-- Login -->
+    <string name="lbl_welcome">Welcome</string>
+    <string name="lbl_login_to_continue">Login to continue</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="btn_login">Login</string>
+
+    <!-- Error -->
+    <string name="error_enter_username">Enter Username</string>
+    <string name="error_enter_password">Enter Password</string>
+    <string name="error_wrong_username">Wrong Username. Please enter the correct Username!</string>
+    <string name="error_wrong_password">Wrong Password. Please enter the correct Password!</string>
+
+    <!-- Toast -->
+    <string name="toast_success">Success</string>
+
+</resources>
