@@ -16,13 +16,39 @@ import java.io.IOException;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
 public class MainActivity extends AppCompatActivity {
     // Widgets
     private EditText inputUsername;
     private EditText inputPassword;
     private Button btnLogin;
-    FileOutputStream fstream;
-    Intent intent;
+
+    // External File
+    private String filename = "credentials.txt";
+    private String filepath = "MyFileStorageNocholla";
+    File myExternalFile;
+    //TextView responseText ;
+    String myData = "";
 
     /**
      * @method onCreate
@@ -47,30 +73,6 @@ public class MainActivity extends AppCompatActivity {
                 final String password = inputPassword.getText().toString();
                 Log.d("DEBUG PASSWORD", password);
 
-                intent = new Intent(MainActivity.this, UserDetailsActivity.class);
-                startActivity(intent);
-
-                // Save to External File
-                try {
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},23);
-                    File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                    File myFile = new File(folder,"credentials");
-                    fstream = new FileOutputStream(myFile);
-                    fstream.write(username.getBytes());
-                    fstream.write(password.getBytes());
-                    fstream.close();
-
-                    Toast.makeText(getApplicationContext(), "Details Saved in " + myFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-
-                    //intent = new Intent(MainActivity.this, UserDetailsActivity.class);
-                    //startActivity(intent);
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
                 // Username Empty Validation
                 if (TextUtils.isEmpty(username)) {
                     inputUsername.setError(getString(R.string.error_enter_username));
@@ -84,9 +86,101 @@ public class MainActivity extends AppCompatActivity {
 
                     return;
                 }
+
+                // Save To External Storage
+                SaveExternalStorage();
+
+                //intent = new Intent(MainActivity.this, UserDetailsActivity.class);
+                //startActivity(intent);
+
+                // Save to External File
+//                try {
+//                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},23);
+//                    File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+//                    File myFile = new File(folder,"credentials");
+//                    fstream = new FileOutputStream(myFile);
+//                    fstream.write(username.getBytes());
+//                    fstream.write(password.getBytes());
+//                    fstream.close();
+//
+//                    Toast.makeText(getApplicationContext(), "Details Saved in " + myFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+//
+//                    //intent = new Intent(MainActivity.this, UserDetailsActivity.class);
+//                    //startActivity(intent);
+//
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+
             }
         });
 
+        // Check if external storage is available and not read only
+        if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
+            // disable the login button
+            btnLogin.setEnabled(false);
+        } else {
+            myExternalFile = new File(getExternalFilesDir(filepath), filename);
+            Log.d("DEBUG EXTERNAL FILE"," External File Path and Name : " + myExternalFile);
+        }
+
+    }
+
+    private void SaveExternalStorage() {
+        String username = inputUsername.getText().toString();
+        Log.d("DEBUG EX STORAGE UNAME", username);
+
+        final String password = inputPassword.getText().toString();
+        Log.d("DEBUG EX STORAGE PASS", password);
+
+        try {
+            FileOutputStream fos = new FileOutputStream(myExternalFile);
+            fos.write(username.getBytes());
+            fos.write(password.getBytes());
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        inputUsername.setText("");
+        inputPassword.setText("");
+        //responseText.setText("credentials.txt saved to External Storage!");
+    }
+
+    private void GetExternalStorage() {
+        try {
+            FileInputStream fis = new FileInputStream(myExternalFile);
+            DataInputStream in = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            String strLine;
+            while ((strLine = br.readLine()) != null) {
+                myData = myData + strLine;
+            }
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        inputUsername.setText(myData);
+        //responseText.setText("credentials.txt data retrieved from External Storage!");
+    }
+
+    private static boolean isExternalStorageReadOnly() {
+        String extStorageState = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isExternalStorageAvailable() {
+        String extStorageState = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
+            return true;
+        }
+        return false;
     }
 
 }
