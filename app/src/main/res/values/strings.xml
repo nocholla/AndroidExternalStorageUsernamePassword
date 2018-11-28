@@ -1,7 +1,7 @@
 <resources>
 
     <!-- App -->
-    <string name="app_name">ExternalStorageUsernamePassword</string>
+    <string name="app_name">External Storage</string>
 
     <!-- Login -->
     <string name="lbl_welcome">Welcome</string>
