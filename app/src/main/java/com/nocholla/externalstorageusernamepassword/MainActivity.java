@@ -179,9 +179,91 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+//    @Override
+//    protected void onRestart() {
+//        super.onRestart();
+//
+//        // Check if external storage is available and not read only
+//        if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
+//            // disable the login button
+//            btnLogin.setEnabled(false);
+//        } else {
+//            myExternalFile = new File(getExternalFilesDir(filepath), filename);
+//            Log.d("DEBUG EXTERNAL FILE"," External File Path and Name : " + myExternalFile);
+//            // 2018-11-28 09:56:00.752 30321-30321/com.nocholla.externalstorageusernamepassword D/DEBUG EXTERNAL FILE:  External File Path and Name : /storage/emulated/0/Android/data/com.nocholla.externalstorageusernamepassword/files/MyFileStorageNocholla/credentials.txt
+//
+//            // Get External Storage
+//            if(myExternalFile.exists()) {
+//                FileInputStream fis = null;
+//                try {
+//                    fis = new FileInputStream(myExternalFile);
+//                    DataInputStream in = new DataInputStream(fis);
+//                    BufferedReader br = new BufferedReader(new InputStreamReader(in));
+//                    String strLine;
+//                    while ((strLine = br.readLine()) != null) {
+//                        myData = myData + strLine;
+//                        Log.d("DEBUG MY DATA", myData);
+//                        // 2018-11-28 09:56:00.755 30321-30321/com.nocholla.externalstorageusernamepassword D/DEBUG MY DATA: nochollanocholla123
+//                    }
+//                    in.close();
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                // Set Username
+//                inputUsername.setText(myData);
+//
+//            }
+//        }
+//
+//    }
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//
+//        // Check if external storage is available and not read only
+//        if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
+//            // disable the login button
+//            btnLogin.setEnabled(false);
+//        } else {
+//            myExternalFile = new File(getExternalFilesDir(filepath), filename);
+//            Log.d("DEBUG EXTERNAL FILE"," External File Path and Name : " + myExternalFile);
+//            // 2018-11-28 09:56:00.752 30321-30321/com.nocholla.externalstorageusernamepassword D/DEBUG EXTERNAL FILE:  External File Path and Name : /storage/emulated/0/Android/data/com.nocholla.externalstorageusernamepassword/files/MyFileStorageNocholla/credentials.txt
+//
+//            // Get External Storage
+//            if(myExternalFile.exists()) {
+//                FileInputStream fis = null;
+//                try {
+//                    fis = new FileInputStream(myExternalFile);
+//                    DataInputStream in = new DataInputStream(fis);
+//                    BufferedReader br = new BufferedReader(new InputStreamReader(in));
+//                    String strLine;
+//                    while ((strLine = br.readLine()) != null) {
+//                        myData = myData + strLine;
+//                        Log.d("DEBUG MY DATA", myData);
+//                        // 2018-11-28 09:56:00.755 30321-30321/com.nocholla.externalstorageusernamepassword D/DEBUG MY DATA: nochollanocholla123
+//                    }
+//                    in.close();
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                // Set Username
+//                inputUsername.setText(myData);
+//
+//            }
+//        }
+//
+//    }
+
     @Override
-    protected void onRestart() {
-        super.onRestart();
+    protected void onResume() {
+        super.onResume();
 
         // Check if external storage is available and not read only
         if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
@@ -218,6 +300,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 
 }
